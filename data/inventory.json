@@ -1,9 +1,9 @@
 [
   {
-    "id": "68d9eed4-040a-41b0-9560-c5c8c53bb3eb",
-    "name": "Pale Malt",
+    "id": "62c35b7e-8fcf-42cd-89ef-06b81cc2eec6",
+    "name": "Barley",
     "category": "Grain",
-    "quantity": 100.0,
+    "quantity": 200.0,
     "unit": "lb",
     "threshold": 50.0
   }

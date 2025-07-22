@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "68d9eed4-040a-41b0-9560-c5c8c53bb3eb",
+    "name": "Pale Malt",
+    "category": "Grain",
+    "quantity": 100.0,
+    "unit": "lb",
+    "threshold": 50.0
+  }
+]

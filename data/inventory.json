@@ -6,5 +6,13 @@
     "quantity": 200.0,
     "unit": "lb",
     "threshold": 50.0
+  },
+  {
+    "id": "249f4108-e8b3-413f-87c6-c08a1adb12d8",
+    "name": "Barley",
+    "category": "Grain",
+    "quantity": 200.0,
+    "unit": "lb",
+    "threshold": 50.0
   }
 ]

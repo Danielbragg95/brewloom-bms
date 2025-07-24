@@ -1,5 +1,6 @@
 import streamlit as st
 from modules.inventory.inventory_store import get_all_items, update_quantity
+from modules.inventory.audit_utils import write_audit_log
 
 def render_inventory_adjust():
     st.header("✏️ Adjust Inventory")
@@ -16,6 +17,7 @@ def render_inventory_adjust():
     if st.button("Apply Adjustment"):
         try:
             update_quantity(options[item_name], delta)
+            write_audit_log("adjust", options[item_name], item_name, after={"quantity_delta": delta})
             st.success(f"{item_name} updated by {delta}.")
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Error adjusting quantity: {e}")

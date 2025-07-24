@@ -1,6 +1,7 @@
 import streamlit as st
 from modules.inventory.inventory_item import InventoryItem
 from modules.inventory.inventory_store import add_item
+from modules.inventory.audit_utils import write_audit_log
 
 def render_add_inventory_item():
     st.header("➕ Add Inventory Item")
@@ -50,4 +51,5 @@ def render_add_inventory_item():
                 threshold=threshold
             )
             add_item(item)
+            write_audit_log('add', item.id, item.name, after=item.__dict__)
             st.success(f"Item '{name}' added to {main_category} > {subcategory}")

@@ -1,5 +1,6 @@
 import streamlit as st
 from modules.inventory.inventory_store import get_all_items, _save_data
+from modules.inventory.audit_utils import write_audit_log
 
 def render_delete_inventory_item():
     st.header("🗑️ Delete Inventory Item")
@@ -29,6 +30,7 @@ def render_delete_inventory_item():
         if st.button("Confirm Delete"):
             updated_items = [item for item in items if item["id"] != item_id]
             _save_data(updated_items)
+            write_audit_log('delete', item_id, selection)
             st.success(f"Item '{selection}' has been permanently deleted.")
             st.session_state.confirming_delete = False
             st.session_state.pending_delete_id = None

@@ -5,6 +5,7 @@ from modules.inventory.edit import render_edit_inventory_item
 from modules.inventory.adjust import render_inventory_adjust
 from modules.inventory.delete import render_delete_inventory_item
 from modules.inventory.import_csv import render_import_inventory
+from modules.inventory.audit_log import render_inventory_audit_log
 
 st.set_page_config(page_title="BrewLoom BMS", layout="wide")
 
@@ -17,7 +18,8 @@ with st.sidebar.expander("📦 Inventory Management", expanded=True):
         "Edit Item",
         "Adjust Item",
         "Delete Item",
-        "Import CSV"
+        "Import CSV",
+        "Audit Log"
     ])
 
 if inventory_module == "Dashboard":
@@ -32,3 +34,5 @@ elif inventory_module == "Delete Item":
     render_delete_inventory_item()
 elif inventory_module == "Import CSV":
     render_import_inventory()
+elif inventory_module == "Audit Log":
+    render_inventory_audit_log()

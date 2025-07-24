@@ -1,5 +1,6 @@
 import streamlit as st
 from modules.inventory.inventory_store import get_all_items, _save_data
+from modules.inventory.audit_utils import write_audit_log
 from modules.inventory.inventory_item import InventoryItem
 
 def render_edit_inventory_item():
@@ -42,4 +43,5 @@ def render_edit_inventory_item():
                     item["threshold"] = threshold
                     break
             _save_data(items)
+            write_audit_log('edit', selected['id'], selected['name'], before=selected, after=item)
             st.success("Item updated successfully!")

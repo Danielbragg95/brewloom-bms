@@ -20,8 +20,8 @@ def get_all_items():
 
 def add_item(item: InventoryItem):
     data = _load_data()
-    item_dict = item.__dict__
-    item_dict["id"] = str(uuid4())
+    item_dict = item.__dict__.copy()
+    item_dict["id"] = str(uuid4())  # ensure new ID
     data.append(item_dict)
     _save_data(data)
 

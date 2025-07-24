@@ -12,6 +12,10 @@ def render_inventory_adjust():
     options = {item["name"]: item["id"] for item in items}
     item_name = st.selectbox("Select item", list(options.keys()))
     delta = st.number_input("Adjustment quantity (+/-)", value=0.0, step=0.5)
+
     if st.button("Apply Adjustment"):
-        update_quantity(options[item_name], delta)
-        st.success(f"{item_name} updated.")
+        try:
+            update_quantity(options[item_name], delta)
+            st.success(f"{item_name} updated by {delta}.")
+        except Exception as e:
+            st.error(f"Error: {e}")

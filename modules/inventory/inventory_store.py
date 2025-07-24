@@ -20,6 +20,11 @@ def get_all_items():
 
 def add_item(item: InventoryItem):
     data = _load_data()
+    for existing in data:
+        if existing["name"].lower() == item.name.lower() and existing["category"] == item.category:
+            existing["quantity"] += item.quantity
+            _save_data(data)
+            return
     item_dict = item.__dict__.copy()
     item_dict["id"] = str(uuid4())  # ensure new ID
     data.append(item_dict)

@@ -1,18 +1,18 @@
 [
   {
-    "id": "62c35b7e-8fcf-42cd-89ef-06b81cc2eec6",
+    "id": "4acca5a3-f6da-457e-b894-24039477f53e",
     "name": "Barley",
-    "category": "Grain",
-    "quantity": 200.0,
-    "unit": "lb",
+    "category": "Raw Materials",
+    "quantity": 250.0,
+    "unit": "lbs",
     "threshold": 50.0
   },
   {
-    "id": "249f4108-e8b3-413f-87c6-c08a1adb12d8",
-    "name": "Barley",
+    "id": "675839ab-801a-43fc-b0df-64614eda8875",
+    "name": "Oats",
     "category": "Grain",
-    "quantity": 200.0,
-    "unit": "lb",
-    "threshold": 50.0
+    "quantity": 300.0,
+    "unit": "lbs",
+    "threshold": 60.0
   }
 ]

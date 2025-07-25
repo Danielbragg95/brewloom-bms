@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1f34fb65-11d5-429d-a29b-5f43ccd33cec",
+    "name": "Hops King",
+    "contact_name": "Michael Jordan",
+    "email": "MJ@hopsking.com",
+    "phone": "555-555-5555",
+    "address": "21 Hop Street",
+    "city": "Hopsville",
+    "state": "CA",
+    "zip": "99899",
+    "payment_terms": "Net 30",
+    "notes": "Great hops company",
+    "active": true
+  }
+]

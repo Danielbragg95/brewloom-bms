@@ -16,11 +16,14 @@ def write_audit_log(action, item_id, item_name, before=None, after=None):
 
     if os.path.exists(LOG_FILE):
         with open(LOG_FILE, "r") as f:
-            logs = json.load(f)
-    else:
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []
         logs = []
 
     logs.append(log_entry)
 
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
     with open(LOG_FILE, "w") as f:
         json.dump(logs, f, indent=2)

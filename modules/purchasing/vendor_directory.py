@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 import uuid
+import pandas as pd
 
 VENDOR_FILE = "data/vendors.json"
 
@@ -9,9 +10,13 @@ def load_vendors():
     if not os.path.exists(VENDOR_FILE):
         return []
     with open(VENDOR_FILE, "r") as f:
-        return json.load(f)
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
 
 def save_vendors(data):
+    os.makedirs(os.path.dirname(VENDOR_FILE), exist_ok=True)
     with open(VENDOR_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
@@ -19,6 +24,7 @@ def render_vendor_directory():
     st.header("📇 Vendor Directory")
 
     vendors = load_vendors()
+
     st.subheader("Add New Vendor")
     with st.form("add_vendor_form"):
         name = st.text_input("Vendor Name")
@@ -55,23 +61,13 @@ def render_vendor_directory():
                     "zip": zip_code,
                     "payment_terms": payment_terms,
                     "notes": notes,
-                    "active": True
                 })
                 save_vendors(vendors)
-                st.success(f"Vendor '{name}' added.")
+                st.success("Vendor added successfully!")
 
-    st.subheader("Existing Vendors")
-    if not vendors:
-        st.info("No vendors added yet.")
-    else:
-        for v in vendors:
-            st.markdown(f"**{v['name']}**")
-            st.markdown(f"- Contact: {v.get('contact_name', '')}")
-            st.markdown(f"- Email: {v.get('email', '')}")
-            st.markdown(f"- Phone: {v.get('phone', '')}")
-            st.markdown(f"- Address: {v.get('address', '')}, {v.get('city', '')}, {v.get('state', '')} {v.get('zip', '')}")
-            st.markdown(f"- Payment Terms: {v.get('payment_terms', '')}")
-            st.markdown(f"- Active: {'✅' if v.get('active', True) else '❌'}")
-            if v.get("notes"):
-                st.markdown(f"> _{v['notes']}_")
-            st.markdown("---")
+    if vendors:
+        st.subheader("Existing Vendors")
+        df = pd.DataFrame(vendors)
+        df = df[["name", "contact_name", "email", "phone", "address", "city", "state", "zip", "payment_terms"]]
+        df.columns = ["Vendor Name", "Contact", "Email", "Phone", "Street", "City", "State", "Zip", "Terms"]
+        st.dataframe(df, hide_index=True)

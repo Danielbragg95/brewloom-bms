@@ -1,55 +1,60 @@
 import streamlit as st
-from modules.inventory.inventory_item import InventoryItem
+import uuid
 from modules.inventory.inventory_store import add_item
-from modules.inventory.audit_utils import write_audit_log
+
+CATEGORY_STRUCTURE = {
+    "Ingredients": {
+        "Grain": "lbs",
+        "Hops": "oz",
+        "Yeast": "g"
+    },
+    "Packaging": {
+        "Bottles": "ea",
+        "Cans": "ea",
+        "Labels": "rolls"
+    },
+    "Custodial Supplies": {
+        "Cleaner": "gal",
+        "Paper Towels": "rolls",
+        "Gloves": "box"
+    }
+}
 
 def render_add_inventory_item():
     st.header("➕ Add Inventory Item")
 
-    CATEGORY_MAP = {
-        "Ingredients": ["Grain", "Hops", "Yeast", "Adjuncts"],
-        "Packaging": ["Cans", "Labels", "Caps"],
-        "Custodial Supplies": ["Soap", "Paper Towels", "Sanitizer"],
-        "Other": ["Miscellaneous"]
-    }
+    if "selected_category" not in st.session_state:
+        st.session_state.selected_category = list(CATEGORY_STRUCTURE.keys())[0]
 
-    UNIT_DEFAULTS = {
-        "Grain": "lbs",
-        "Hops": "lbs",
-        "Yeast": "oz",
-        "Adjuncts": "oz",
-        "Cans": "count",
-        "Labels": "count",
-        "Caps": "count",
-        "Soap": "gal",
-        "Sanitizer": "gal",
-        "Paper Towels": "rolls",
-        "Miscellaneous": "units"
-    }
+    # Let user select category (outside form so it triggers rerender)
+    st.session_state.selected_category = st.selectbox(
+        "Main Category", list(CATEGORY_STRUCTURE.keys()), index=list(CATEGORY_STRUCTURE.keys()).index(st.session_state.selected_category)
+    )
 
-    main_category = st.selectbox("Select Category", list(CATEGORY_MAP.keys()))
-    subcategories = sorted(CATEGORY_MAP[main_category])
-    subcategory = st.selectbox("Select Subcategory", subcategories)
+    subcategory_options = list(CATEGORY_STRUCTURE[st.session_state.selected_category].keys())
 
-    name = st.text_input("Item Name")
-    quantity = st.number_input("Starting Quantity", min_value=0.0, step=0.5)
-    default_unit = UNIT_DEFAULTS.get(subcategory, "units")
-    unit = st.text_input("Unit (e.g. lbs, oz, gal)", value=default_unit)
-    threshold = st.number_input("Threshold for Alerts", min_value=0.0, step=0.5)
+    with st.form("add_inventory_form"):
+        name = st.text_input("Item Name")
 
-    if st.button("Add Item"):
-        if not name or not unit:
-            st.warning("Name and Unit are required.")
-        else:
-            item = InventoryItem(
-                id="temp",
-                name=name,
-                category=main_category,
-                subcategory=subcategory,
-                quantity=quantity,
-                unit=unit,
-                threshold=threshold
-            )
-            add_item(item)
-            write_audit_log('add', item.id, item.name, after=item.__dict__)
-            st.success(f"Item '{name}' added to {main_category} > {subcategory}")
+        subcategory = st.selectbox("Subcategory", subcategory_options)
+        unit_default = CATEGORY_STRUCTURE[st.session_state.selected_category][subcategory]
+        quantity = st.number_input("Quantity", min_value=0.0, step=0.5)
+        unit = st.text_input("Unit", value=unit_default)
+        threshold = st.number_input("Reorder Threshold", min_value=0.0, step=0.5)
+
+        submitted = st.form_submit_button("Add Item")
+        if submitted:
+            if not name:
+                st.warning("Item name is required.")
+            else:
+                item_data = {
+                    "id": str(uuid.uuid4()),
+                    "name": name,
+                    "category": st.session_state.selected_category,
+                    "subcategory": subcategory,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "threshold": threshold
+                }
+                add_item(item_data)
+                st.success(f"Item '{name}' added to inventory.")

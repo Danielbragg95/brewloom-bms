@@ -1,43 +1,30 @@
 import json
 import os
-from uuid import uuid4
-from modules.inventory.inventory_item import InventoryItem
 
-DATA_FILE = "data/inventory.json"
-
-def _load_data():
-    if not os.path.exists(DATA_FILE):
-        return []
-    with open(DATA_FILE, "r") as f:
-        return json.load(f)
-
-def _save_data(data):
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+INVENTORY_FILE = "data/inventory.json"
 
 def get_all_items():
-    return _load_data()
+    if not os.path.exists(INVENTORY_FILE):
+        return []
+    with open(INVENTORY_FILE, "r") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
+def save_items(data):
+    os.makedirs(os.path.dirname(INVENTORY_FILE), exist_ok=True)
+    with open(INVENTORY_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
-def add_item(item: InventoryItem):
-    data = _load_data()
-    for existing in data:
-        if (
-            existing["name"].lower() == item.name.lower() and
-            existing["subcategory"] == item.subcategory and
-            existing["category"] == item.category
-        ):
-            existing["quantity"] += item.quantity
-            _save_data(data)
-            return
-    item_dict = item.__dict__.copy()
-    item_dict["id"] = str(uuid4())
-    data.append(item_dict)
-    _save_data(data)
+def add_item(new_item):
+    items = get_all_items()
+    items.append(new_item)
+    save_items(items)
 
 def update_quantity(item_id, delta):
-    data = _load_data()
-    for item in data:
+    items = get_all_items()
+    for item in items:
         if item["id"] == item_id:
             item["quantity"] += delta
             break
-    _save_data(data)
+    save_items(items)

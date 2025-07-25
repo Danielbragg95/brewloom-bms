@@ -12,8 +12,10 @@ def render_inventory_audit_log():
         return
 
     with open(LOG_FILE, "r") as f:
-        logs = json.load(f)
-
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
     if not logs:
         st.info("Audit log is empty.")
         return

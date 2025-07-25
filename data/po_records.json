@@ -1,0 +1,34 @@
+[
+  {
+    "po_id": "PO-0001",
+    "vendor": "Hops King",
+    "items": [
+      {
+        "item_name": "Citra",
+        "quantity": 500,
+        "unit_cost": 20.0,
+        "category": "Ingredients",
+        "subcategory": "Hops",
+        "unit": "lbs"
+      },
+      {
+        "item_name": "Simcoe",
+        "quantity": 300,
+        "unit_cost": 13.0,
+        "category": "Ingredients",
+        "subcategory": "Hops",
+        "unit": "lbs"
+      },
+      {
+        "item_name": "Galaxy",
+        "quantity": 550,
+        "unit_cost": 15.0,
+        "category": "Ingredients",
+        "subcategory": "Hops",
+        "unit": "lbs"
+      }
+    ],
+    "timestamp": "2025-07-25 15:49:08",
+    "status": "Pending"
+  }
+]
